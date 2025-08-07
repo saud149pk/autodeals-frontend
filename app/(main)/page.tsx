@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { CarFilters } from "@/components/car-filters"
 import CarCard from "@/components/car-card"
+import ChatCarCard from "@/components/chat-car-card"
 import { CarDetailsModal } from "@/components/car-details-modal"
 import { Send, MessageCircle, Car, Search } from 'lucide-react'
 
@@ -62,20 +63,70 @@ const mockCars = [
   }
 ]
 
+// --- Placeholder Conversation Setup ---
+interface ChatCar {
+  make: string
+  model: string
+  year: number
+  price: string
+  image: string
+  mileage: string
+  type: string
+  engine: string
+}
+
+const placeholderCars: ChatCar[] = [
+  {
+    make: "Toyota",
+    model: "RAV4",
+    year: 2023,
+    price: "$34,500",
+    image: "/toyota-rav4-forest.png",
+    mileage: "15k miles",
+    type: "SUV",
+    engine: "2.5L 4-Cylinder",
+  },
+  {
+    make: "Honda",
+    model: "CR-V",
+    year: 2023,
+    price: "$36,800",
+    image: "/honda-crv.png",
+    mileage: "12k miles",
+    type: "SUV",
+    engine: "1.5L Turbo",
+  },
+  {
+    make: "Hyundai",
+    model: "Santa Fe",
+    year: 2023,
+    price: "$38,200",
+    image: "/hyundai-santa-fe.png",
+    mileage: "18k miles",
+    type: "SUV",
+    engine: "2.5L 4-Cylinder",
+  },
+]
+
 interface Message {
   id: string
   role: "user" | "assistant"
   content: string
+  cars?: ChatCar[]
 }
 
+const initialMessages: Message[] = [
+  { id: '1', role: 'user', content: 'Hey, I am looking for a spacious car.' },
+  { id: '2', role: 'assistant', content: 'Sure, what are your color preferences?' },
+  { id: '3', role: 'user', content: 'I don\'t have any specifics, but I like light-colored cars.' },
+  { id: '4', role: 'assistant', content: 'What is your budget range?' },
+  { id: '5', role: 'user', content: 'It\'s under $40k.' },
+  { id: '6', role: 'assistant', content: 'Great! Here are some considerations:', cars: placeholderCars },
+]
+// --- End Placeholder Conversation Setup ---
+
 export default function HomePage() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      role: "assistant",
-      content: "Hello! I'm your car finder assistant. I can help you find the perfect car based on your preferences. What kind of car are you looking for?"
-    }
-  ])
+  const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [selectedCar, setSelectedCar] = useState<typeof mockCars[0] | null>(null)
@@ -185,12 +236,12 @@ export default function HomePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col">
-              <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+              <div className="flex-1 overflow-y-auto space-y-4 mb-4 p-1">
                 {messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex ${
-                      message.role === "user" ? "justify-end" : "justify-start"
+                    className={`flex flex-col gap-2 ${
+                      message.role === "user" ? "items-end" : "items-start"
                     }`}
                   >
                     <div
@@ -202,6 +253,13 @@ export default function HomePage() {
                     >
                       {message.content}
                     </div>
+                    {message.cars && (
+                      <div className="flex gap-4 overflow-x-auto pb-2">
+                        {message.cars.map((car, index) => (
+                          <ChatCarCard key={index} car={car} />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
                 {isLoading && (
