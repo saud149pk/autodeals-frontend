@@ -57,6 +57,18 @@ const complexPlaceholderCars: ChatCar[] = [
   },
 ]
 
+const newAcuraRDX: ChatCar = {
+  make: "Acura",
+  model: "RDX",
+  year: 2023,
+  price: "$43,950",
+  image: "/acura-rdx.png",
+  mileage: "11k miles",
+  type: "SUV",
+  engine: "2.0L Turbo",
+  financing: "$579",
+}
+
 interface Message {
   id: string
   role: "user" | "assistant"
@@ -71,6 +83,9 @@ const complexInitialMessages: Message[] = [
   { id: '4', role: 'assistant', content: 'Understood. Based on a typical 60-month loan term with a good credit score, that puts you in a great position for several new and late-model SUVs. Here are a few top contenders that fit your criteria, along with estimated monthly payments:', cars: complexPlaceholderCars },
   { id: '5', role: 'user', content: 'The Volvo looks interesting. You mentioned advanced safety. Can you tell me more about that, and how it compares to the Lexus?' },
   { id: '6', role: 'assistant', content: 'Excellent question! The 2023 Volvo XC60 is renowned for its safety. It comes standard with \'Pilot Assist\', a semi-autonomous driving system that helps with steering, acceleration, and braking on well-marked roads. It also includes \'City Safety\' with collision avoidance for pedestrians, cyclists, and large animals.\n\nThe Lexus RX 350 features \'Lexus Safety System+ 3.0\', which is also very comprehensive, including features like a Pre-Collision System with Pedestrian Detection and All-Speed Dynamic Radar Cruise Control. While both are top-rated, many reviewers give a slight edge to Volvo\'s Pilot Assist for its smoothness in highway driving.' },
+  { id: '7', role: 'user', content: 'This is great information, thanks. The Volvo is a strong contender, but keep an eye out for anything similar that might pop up, especially if it has a slightly better price point.' },
+  { id: '8', role: 'assistant', content: 'Absolutely! I\'ll continue monitoring the market for you and will let you know if a great match appears.' },
+  { id: '9', role: 'assistant', content: '🔔 **New Find!** I\'ve just come across a 2023 Acura RDX with the Technology Package that just hit the market. It\'s very comparable to the XC60, has excellent safety ratings, and is listed at a slightly lower price. Take a look:', cars: [newAcuraRDX] },
 ]
 // --- End Placeholder Conversation Setup ---
 
