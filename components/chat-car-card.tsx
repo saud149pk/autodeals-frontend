@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { DollarSign } from 'lucide-react'
 
 interface Car {
   make: string
@@ -13,6 +14,7 @@ interface Car {
   mileage: string
   type: string
   engine: string
+  financing?: string
 }
 
 interface ChatCarCardProps {
@@ -37,6 +39,14 @@ export default function ChatCarCard({ car }: ChatCarCardProps) {
           <Badge variant="secondary">{car.type}</Badge>
           <Badge variant="secondary">{car.engine}</Badge>
         </div>
+        {car.financing && (
+          <div className="mt-3 pt-2 border-t border-dashed">
+            <p className="text-xs text-muted-foreground flex items-center">
+              <DollarSign className="h-3 w-3 mr-1" />
+              Est. {car.financing}/mo
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   )

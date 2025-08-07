@@ -39,10 +39,10 @@ const menuItems = [
 ]
 
 const sampleChats = [
-  { id: "1", title: "Family SUV recommendations" },
-  { id: "2", title: "Best fuel-efficient sedans" },
+  { id: "1", title: "SUV with financing options" },
+  { id: "2", title: "Spacious light-colored car" },
   { id: "3", title: "Comparing electric vehicles" },
-  { id: "4", title: "Sports cars under $50k" },
+  { id: "4", title: "Best fuel-efficient sedans" },
 ]
 
 export function MainSidebar() {

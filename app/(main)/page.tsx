@@ -18,38 +18,42 @@ interface ChatCar {
   mileage: string
   type: string
   engine: string
+  financing?: string
 }
 
-const placeholderCars: ChatCar[] = [
+const complexPlaceholderCars: ChatCar[] = [
   {
-    make: "Toyota",
-    model: "RAV4",
+    make: "Volvo",
+    model: "XC60",
     year: 2023,
-    price: "$34,500",
-    image: "/toyota-rav4-forest.png",
-    mileage: "15k miles",
+    price: "$44,500",
+    image: "/volvo-xc60.png",
+    mileage: "8k miles",
     type: "SUV",
-    engine: "2.5L 4-Cylinder",
+    engine: "2.0L Turbo",
+    financing: "$589",
   },
   {
-    make: "Honda",
-    model: "CR-V",
+    make: "Lexus",
+    model: "RX 350",
     year: 2023,
-    price: "$36,800",
-    image: "/honda-crv.png",
-    mileage: "12k miles",
+    price: "$48,950",
+    image: "/lexus-rx350.png",
+    mileage: "5k miles",
     type: "SUV",
-    engine: "1.5L Turbo",
+    engine: "2.4L Turbo",
+    financing: "$645",
   },
   {
-    make: "Hyundai",
-    model: "Santa Fe",
+    make: "Acura",
+    model: "MDX",
     year: 2023,
-    price: "$38,200",
-    image: "/hyundai-santa-fe.png",
-    mileage: "18k miles",
+    price: "$49,550",
+    image: "/acura-mdx.png",
+    mileage: "7k miles",
     type: "SUV",
-    engine: "2.5L 4-Cylinder",
+    engine: "3.5L V6",
+    financing: "$655",
   },
 ]
 
@@ -60,18 +64,18 @@ interface Message {
   cars?: ChatCar[]
 }
 
-const initialMessages: Message[] = [
-  { id: '1', role: 'user', content: 'Hey, I am looking for a spacious car.' },
-  { id: '2', role: 'assistant', content: 'Sure, what are your color preferences?' },
-  { id: '3', role: 'user', content: 'I don\'t have any specifics, but I like light-colored cars.' },
-  { id: '4', role: 'assistant', content: 'What is your budget range?' },
-  { id: '5', role: 'user', content: 'It\'s under $40k.' },
-  { id: '6', role: 'assistant', content: 'Great! Here are some considerations:', cars: placeholderCars },
+const complexInitialMessages: Message[] = [
+  { id: '1', role: 'user', content: 'I\'m looking for a reliable SUV that\'s good for long road trips, has advanced safety features, and ideally something that came out in the last two years. I also want to know about financing options.' },
+  { id: '2', role: 'assistant', content: 'That\'s a great set of requirements! I can definitely help with that. To start, what\'s your approximate monthly budget for financing?' },
+  { id: '3', role: 'user', content: 'I\'d like to keep it under $700/month.' },
+  { id: '4', role: 'assistant', content: 'Understood. Based on a typical 60-month loan term with a good credit score, that puts you in a great position for several new and late-model SUVs. Here are a few top contenders that fit your criteria, along with estimated monthly payments:', cars: complexPlaceholderCars },
+  { id: '5', role: 'user', content: 'The Volvo looks interesting. You mentioned advanced safety. Can you tell me more about that, and how it compares to the Lexus?' },
+  { id: '6', role: 'assistant', content: 'Excellent question! The 2023 Volvo XC60 is renowned for its safety. It comes standard with \'Pilot Assist\', a semi-autonomous driving system that helps with steering, acceleration, and braking on well-marked roads. It also includes \'City Safety\' with collision avoidance for pedestrians, cyclists, and large animals.\n\nThe Lexus RX 350 features \'Lexus Safety System+ 3.0\', which is also very comprehensive, including features like a Pre-Collision System with Pedestrian Detection and All-Speed Dynamic Radar Cruise Control. While both are top-rated, many reviewers give a slight edge to Volvo\'s Pilot Assist for its smoothness in highway driving.' },
 ]
 // --- End Placeholder Conversation Setup ---
 
 export default function HomePage() {
-  const [messages, setMessages] = useState<Message[]>(initialMessages)
+  const [messages, setMessages] = useState<Message[]>(complexInitialMessages)
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
@@ -159,7 +163,7 @@ export default function HomePage() {
                           : "bg-muted"
                       }`}
                     >
-                      {message.content}
+                      <p className="whitespace-pre-wrap">{message.content}</p>
                     </div>
                     {message.cars && (
                       <div className="flex gap-4 overflow-x-auto pb-2 w-full">
@@ -186,7 +190,7 @@ export default function HomePage() {
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask me about cars..."
+                  placeholder="Ask a follow-up question..."
                   disabled={isLoading}
                 />
                 <Button type="submit" disabled={isLoading}>
