@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from "next/server"
 import { openai } from "@ai-sdk/openai"
 import { streamText } from "ai"
 
@@ -158,33 +159,33 @@ const carDatabase = [
 // Allow responses up to 30 seconds
 export const maxDuration = 30
 
-export async function POST(req: Request) {
-  const { messages } = await req.json()
-
-  // System prompt to guide the AI
-  const systemPrompt = `
-    You are a helpful car recommendation assistant. Help users find cars based on their preferences.
+export async function POST(req: NextRequest) {
+  try {
+    const { messages } = await req.json()
     
-    After understanding the user's needs, recommend exactly 3 cars from the database that best match their criteria.
+    // Simple mock response - replace with actual AI integration
+    const lastMessage = messages[messages.length - 1]
     
-    When you're ready to recommend cars, format your response like this:
-    1. First, provide a brief explanation of why you're recommending these cars
-    2. Then add the exact string "CAR_RECOMMENDATIONS:" followed by a JSON array of 3 car objects
+    let response = "I'd be happy to help you find a car! "
     
-    Example format:
-    Based on your preferences, here are three cars that would be perfect for you:
-    CAR_RECOMMENDATIONS:[{"make":"Toyota","model":"RAV4","year":2023,"price":"$32,000","image":"/placeholder.svg?height=192&width=384","features":["Feature 1","Feature 2","Feature 3"],"mpg":"30 mpg","horsepower":203}]
+    if (lastMessage.content.toLowerCase().includes("suv")) {
+      response += "I see you're interested in SUVs. We have several great options including the Ford F-150 which offers excellent towing capacity and 4WD capability."
+    } else if (lastMessage.content.toLowerCase().includes("sedan")) {
+      response += "For sedans, I'd recommend checking out our Toyota Camry - it's a reliable hybrid with great fuel economy, or the Honda Civic which offers modern tech features."
+    } else if (lastMessage.content.toLowerCase().includes("budget") || lastMessage.content.toLowerCase().includes("cheap")) {
+      response += "For budget-friendly options, the Honda Civic at $24,900 offers great value with modern features and reliability."
+    } else if (lastMessage.content.toLowerCase().includes("fuel") || lastMessage.content.toLowerCase().includes("mpg")) {
+      response += "For fuel efficiency, the Toyota Camry hybrid gets an impressive 32/41 MPG and is very reliable."
+    } else {
+      response += "Could you tell me more about what you're looking for? For example, do you prefer SUVs, sedans, or trucks? What's your budget range?"
+    }
     
-    Available cars in the database: ${JSON.stringify(carDatabase)}
-  `
-
-  // Create a new array with the system message and user messages
-  const conversationMessages = [{ role: "system", content: systemPrompt }, ...messages]
-
-  const result = streamText({
-    model: openai("gpt-4o"),
-    messages: conversationMessages,
-  })
-
-  return result.toDataStreamResponse()
+    return NextResponse.json({ message: response })
+  } catch (error) {
+    console.error("Error in car-chat API:", error)
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
+  }
 }

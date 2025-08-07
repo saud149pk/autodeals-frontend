@@ -1,25 +1,20 @@
-"use client"
-
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface MetropolitanAreaFilterProps {
-  areas: Array<{ value: string; label: string }>
-  selectedArea: string
-  onAreaChange: (value: string) => void
+  selectedMarket: string
+  onMarketChange: (market: string) => void
 }
 
-export function MetropolitanAreaFilter({ areas, selectedArea, onAreaChange }: MetropolitanAreaFilterProps) {
+export function MetropolitanAreaFilter({ selectedMarket, onMarketChange }: MetropolitanAreaFilterProps) {
   return (
-    <Select value={selectedArea} onValueChange={onAreaChange}>
-      <SelectTrigger className="w-full sm:w-[280px]">
-        <SelectValue placeholder="Select Market Area" />
+    <Select value={selectedMarket} onValueChange={onMarketChange}>
+      <SelectTrigger className="w-[200px]">
+        <SelectValue placeholder="Select market" />
       </SelectTrigger>
       <SelectContent>
-        {areas.map((area) => (
-          <SelectItem key={area.value} value={area.value}>
-            {area.label}
-          </SelectItem>
-        ))}
+        <SelectItem value="nationwide">Nationwide</SelectItem>
+        <SelectItem value="new-york">New York Metro</SelectItem>
+        <SelectItem value="los-angeles">Los Angeles Metro</SelectItem>
       </SelectContent>
     </Select>
   )

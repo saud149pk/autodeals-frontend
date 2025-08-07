@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Inter } from "next/font/google"
+import { Inter } from 'next/font/google'
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { MainSidebar } from "@/components/main-sidebar"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -22,7 +22,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <div className="flex min-h-screen flex-col">
               <header className="border-b bg-background">
                 <div className="container flex h-14 items-center px-4">
-                  {/* You might want a different header for the statistics page, or a back button */}
                   <div className="font-semibold">Car Statistics Dashboard</div>
                 </div>
               </header>
