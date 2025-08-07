@@ -159,32 +159,28 @@ const carDatabase = [
 // Allow responses up to 30 seconds
 export const maxDuration = 30
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const { messages } = await req.json()
+    const { messages } = await request.json()
     
-    // Simple mock response - replace with actual AI integration
-    const lastMessage = messages[messages.length - 1]
+    // Mock response - replace with actual AI integration later
+    const mockResponses = [
+      "I'd be happy to help you find a car! What's your budget range?",
+      "Based on your preferences, I recommend looking at sedans or SUVs. What size vehicle do you prefer?",
+      "Great choice! Let me show you some options that match your criteria.",
+      "Those are excellent features to look for. Here are some cars that have those specifications.",
+      "I can help you compare different models. What specific features are most important to you?"
+    ]
     
-    let response = "I'd be happy to help you find a car! "
+    const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)]
     
-    if (lastMessage.content.toLowerCase().includes("suv")) {
-      response += "I see you're interested in SUVs. We have several great options including the Ford F-150 which offers excellent towing capacity and 4WD capability."
-    } else if (lastMessage.content.toLowerCase().includes("sedan")) {
-      response += "For sedans, I'd recommend checking out our Toyota Camry - it's a reliable hybrid with great fuel economy, or the Honda Civic which offers modern tech features."
-    } else if (lastMessage.content.toLowerCase().includes("budget") || lastMessage.content.toLowerCase().includes("cheap")) {
-      response += "For budget-friendly options, the Honda Civic at $24,900 offers great value with modern features and reliability."
-    } else if (lastMessage.content.toLowerCase().includes("fuel") || lastMessage.content.toLowerCase().includes("mpg")) {
-      response += "For fuel efficiency, the Toyota Camry hybrid gets an impressive 32/41 MPG and is very reliable."
-    } else {
-      response += "Could you tell me more about what you're looking for? For example, do you prefer SUVs, sedans, or trucks? What's your budget range?"
-    }
-    
-    return NextResponse.json({ message: response })
+    return NextResponse.json({ 
+      message: randomResponse 
+    })
   } catch (error) {
-    console.error("Error in car-chat API:", error)
+    console.error('Error in car-chat API:', error)
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: 'Failed to process request' },
       { status: 500 }
     )
   }

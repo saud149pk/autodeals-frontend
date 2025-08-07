@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CarFilters } from "@/components/car-filters"
-import { CarCard } from "@/components/car-card"
+import CarCard from "@/components/car-card"
 import { CarDetailsModal } from "@/components/car-details-modal"
 import { Send, MessageCircle, Car, Search } from 'lucide-react'
 
@@ -17,39 +17,48 @@ const mockCars = [
     make: "Toyota",
     model: "Camry",
     year: 2023,
-    price: 28500,
-    mileage: 15000,
+    price: "$28,500",
     image: "/toyota-camry-modern.png",
     features: ["Hybrid", "Backup Camera", "Bluetooth"],
-    mpg: "32/41",
-    transmission: "CVT",
-    drivetrain: "FWD"
+    mpg: "32 city / 41 hwy",
+    horsepower: 203,
+    exteriorColor: "Midnight Black Metallic",
+    interiorColor: "Black SofTex",
+    engine: "2.5L 4-Cylinder Hybrid",
+    driveTrain: "FWD",
+    description: "The 2023 Toyota Camry Hybrid offers exceptional fuel economy and reliability with a spacious interior and advanced safety features."
   },
   {
     id: 2,
     make: "Honda",
     model: "Civic",
     year: 2022,
-    price: 24900,
-    mileage: 22000,
+    price: "$24,900",
     image: "/honda-civic-modern-city.png",
     features: ["Apple CarPlay", "Lane Keeping", "Adaptive Cruise"],
-    mpg: "31/40",
-    transmission: "CVT",
-    drivetrain: "FWD"
+    mpg: "31 city / 40 hwy",
+    horsepower: 180,
+    exteriorColor: "Sonic Gray Pearl",
+    interiorColor: "Black Cloth",
+    engine: "1.5L Turbocharged 4-Cylinder",
+    driveTrain: "FWD",
+    description: "The Honda Civic delivers sporty performance with excellent fuel efficiency and a tech-forward interior."
   },
   {
     id: 3,
     make: "Ford",
     model: "F-150",
     year: 2023,
-    price: 45000,
-    mileage: 8000,
+    price: "$45,000",
     image: "/ford-f150-truck.png",
     features: ["4WD", "Towing Package", "Bed Liner"],
-    mpg: "20/24",
-    transmission: "10-Speed Automatic",
-    drivetrain: "4WD"
+    mpg: "20 city / 24 hwy",
+    horsepower: 400,
+    exteriorColor: "Oxford White",
+    interiorColor: "Black ActiveX",
+    engine: "3.5L EcoBoost V6",
+    driveTrain: "4WD",
+    description: "America's best-selling truck combines capability, technology, and comfort for work and play."
   }
 ]
 
@@ -134,15 +143,11 @@ export default function HomePage() {
 
     if (filters.minPrice || filters.maxPrice) {
       filtered = filtered.filter(car => {
-        const price = car.price
+        const price = parseInt(car.price.replace(/[$,]/g, ''))
         const min = filters.minPrice || 0
         const max = filters.maxPrice || Infinity
         return price >= min && price <= max
       })
-    }
-
-    if (filters.maxMileage) {
-      filtered = filtered.filter(car => car.mileage <= filters.maxMileage)
     }
 
     setFilteredCars(filtered)
@@ -229,7 +234,6 @@ export default function HomePage() {
             <CarCard
               key={car.id}
               car={car}
-              onViewDetails={() => setSelectedCar(car)}
             />
           ))}
         </div>

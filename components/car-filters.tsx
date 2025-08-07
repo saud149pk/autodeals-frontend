@@ -1,172 +1,219 @@
 "use client"
 
 import { useState } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
-import { Badge } from "@/components/ui/badge"
-import { X, Filter, ChevronDown, ChevronUp } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Filter } from 'lucide-react'
 
-export function CarFilters() {
-  const [expanded, setExpanded] = useState(false)
-  const [activeFilters, setActiveFilters] = useState<string[]>([])
+interface CarFiltersProps {
+  onFilterChange?: (filters: any) => void
+}
 
-  const toggleFilter = (filter: string) => {
-    if (activeFilters.includes(filter)) {
-      setActiveFilters(activeFilters.filter((f) => f !== filter))
-    } else {
-      setActiveFilters([...activeFilters, filter])
+export function CarFilters({ onFilterChange }: CarFiltersProps) {
+  const [filters, setFilters] = useState({
+    make: "",
+    model: "",
+    minYear: 2015,
+    maxYear: 2024,
+    minPrice: 0,
+    maxPrice: 100000,
+    maxMileage: 100000,
+    bodyType: "",
+    transmission: "",
+    fuelType: ""
+  })
+
+  const handleFilterChange = (key: string, value: any) => {
+    const newFilters = { ...filters, [key]: value }
+    setFilters(newFilters)
+    onFilterChange?.(newFilters)
+  }
+
+  const resetFilters = () => {
+    const defaultFilters = {
+      make: "",
+      model: "",
+      minYear: 2015,
+      maxYear: 2024,
+      minPrice: 0,
+      maxPrice: 100000,
+      maxMileage: 100000,
+      bodyType: "",
+      transmission: "",
+      fuelType: ""
     }
+    setFilters(defaultFilters)
+    onFilterChange?.(defaultFilters)
   }
 
   return (
-    <div className="bg-background border rounded-lg mb-4">
-      <div className="flex items-center justify-between p-3">
-        <div className="flex items-center">
-          <Filter className="h-4 w-4 mr-2" />
-          <span className="font-medium">Filters</span>
-          {activeFilters.length > 0 && (
-            <Badge variant="secondary" className="ml-2">
-              {activeFilters.length}
-            </Badge>
-          )}
-        </div>
-        <Button variant="ghost" size="sm" onClick={() => setExpanded(!expanded)} className="h-8 w-8 p-0">
-          {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-        </Button>
-      </div>
-
-      <div className={cn("px-3 pb-3 grid gap-4", expanded ? "grid-cols-1 md:grid-cols-4" : "hidden")}>
-        {/* Vehicle Type */}
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Vehicle Type</label>
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="All Types" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="suv">SUV</SelectItem>
-              <SelectItem value="sedan">Sedan</SelectItem>
-              <SelectItem value="truck">Truck</SelectItem>
-              <SelectItem value="coupe">Coupe</SelectItem>
-              <SelectItem value="hatchback">Hatchback</SelectItem>
-              <SelectItem value="convertible">Convertible</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Price Range */}
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Price Range</label>
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Any Price" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Any Price</SelectItem>
-              <SelectItem value="under-20k">Under $20,000</SelectItem>
-              <SelectItem value="20k-30k">$20,000 - $30,000</SelectItem>
-              <SelectItem value="30k-50k">$30,000 - $50,000</SelectItem>
-              <SelectItem value="50k-80k">$50,000 - $80,000</SelectItem>
-              <SelectItem value="over-80k">Over $80,000</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Filter className="h-5 w-5" />
+          Filters
+        </CardTitle>
+        <CardDescription>
+          Narrow down your search results
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
         {/* Make */}
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Make</label>
-          <Select>
+        <div className="space-y-2">
+          <Label htmlFor="make">Make</Label>
+          <Select value={filters.make} onValueChange={(value) => handleFilterChange("make", value)}>
             <SelectTrigger>
-              <SelectValue placeholder="All Makes" />
+              <SelectValue placeholder="Any make" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Makes</SelectItem>
+              <SelectItem value="">Any make</SelectItem>
               <SelectItem value="toyota">Toyota</SelectItem>
               <SelectItem value="honda">Honda</SelectItem>
               <SelectItem value="ford">Ford</SelectItem>
               <SelectItem value="chevrolet">Chevrolet</SelectItem>
+              <SelectItem value="nissan">Nissan</SelectItem>
               <SelectItem value="bmw">BMW</SelectItem>
               <SelectItem value="mercedes">Mercedes-Benz</SelectItem>
               <SelectItem value="audi">Audi</SelectItem>
-              <SelectItem value="tesla">Tesla</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Year */}
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">Year</label>
-          <Select>
+        {/* Model */}
+        <div className="space-y-2">
+          <Label htmlFor="model">Model</Label>
+          <Input
+            id="model"
+            placeholder="Enter model"
+            value={filters.model}
+            onChange={(e) => handleFilterChange("model", e.target.value)}
+          />
+        </div>
+
+        {/* Year Range */}
+        <div className="space-y-2">
+          <Label>Year Range</Label>
+          <div className="px-2">
+            <Slider
+              value={[filters.minYear, filters.maxYear]}
+              onValueChange={([min, max]) => {
+                handleFilterChange("minYear", min)
+                handleFilterChange("maxYear", max)
+              }}
+              min={2000}
+              max={2024}
+              step={1}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-muted-foreground mt-1">
+              <span>{filters.minYear}</span>
+              <span>{filters.maxYear}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Price Range */}
+        <div className="space-y-2">
+          <Label>Price Range</Label>
+          <div className="px-2">
+            <Slider
+              value={[filters.minPrice, filters.maxPrice]}
+              onValueChange={([min, max]) => {
+                handleFilterChange("minPrice", min)
+                handleFilterChange("maxPrice", max)
+              }}
+              min={0}
+              max={100000}
+              step={1000}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-muted-foreground mt-1">
+              <span>${filters.minPrice.toLocaleString()}</span>
+              <span>${filters.maxPrice.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Max Mileage */}
+        <div className="space-y-2">
+          <Label>Max Mileage</Label>
+          <div className="px-2">
+            <Slider
+              value={[filters.maxMileage]}
+              onValueChange={([value]) => handleFilterChange("maxMileage", value)}
+              min={0}
+              max={200000}
+              step={5000}
+              className="w-full"
+            />
+            <div className="text-sm text-muted-foreground mt-1">
+              Up to {filters.maxMileage.toLocaleString()} miles
+            </div>
+          </div>
+        </div>
+
+        {/* Body Type */}
+        <div className="space-y-2">
+          <Label htmlFor="bodyType">Body Type</Label>
+          <Select value={filters.bodyType} onValueChange={(value) => handleFilterChange("bodyType", value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Any Year" />
+              <SelectValue placeholder="Any type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Any Year</SelectItem>
-              <SelectItem value="2023">2023</SelectItem>
-              <SelectItem value="2022">2022</SelectItem>
-              <SelectItem value="2021">2021</SelectItem>
-              <SelectItem value="2020">2020</SelectItem>
-              <SelectItem value="2019">2019</SelectItem>
-              <SelectItem value="older">2018 & Older</SelectItem>
+              <SelectItem value="">Any type</SelectItem>
+              <SelectItem value="sedan">Sedan</SelectItem>
+              <SelectItem value="suv">SUV</SelectItem>
+              <SelectItem value="truck">Truck</SelectItem>
+              <SelectItem value="hatchback">Hatchback</SelectItem>
+              <SelectItem value="coupe">Coupe</SelectItem>
+              <SelectItem value="convertible">Convertible</SelectItem>
+              <SelectItem value="wagon">Wagon</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Features */}
-        <div className="md:col-span-4">
-          <label className="text-sm font-medium mb-1.5 block">Features</label>
-          <div className="flex flex-wrap gap-2">
-            {["Hybrid", "Electric", "AWD", "Leather Seats", "Sunroof", "Navigation", "Bluetooth", "Backup Camera"].map(
-              (feature) => (
-                <Badge
-                  key={feature}
-                  variant={activeFilters.includes(feature) ? "default" : "outline"}
-                  className="cursor-pointer"
-                  onClick={() => toggleFilter(feature)}
-                >
-                  {feature}
-                  {activeFilters.includes(feature) && <X className="ml-1 h-3 w-3" />}
-                </Badge>
-              ),
-            )}
-          </div>
+        {/* Transmission */}
+        <div className="space-y-2">
+          <Label htmlFor="transmission">Transmission</Label>
+          <Select value={filters.transmission} onValueChange={(value) => handleFilterChange("transmission", value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Any transmission" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Any transmission</SelectItem>
+              <SelectItem value="automatic">Automatic</SelectItem>
+              <SelectItem value="manual">Manual</SelectItem>
+              <SelectItem value="cvt">CVT</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* MPG Range */}
-        <div className="md:col-span-2">
-          <label className="text-sm font-medium mb-1.5 block">Fuel Economy (MPG)</label>
-          <div className="px-2">
-            <Slider defaultValue={[0, 50]} min={0} max={50} step={1} />
-            <div className="flex justify-between mt-1 text-xs text-muted-foreground">
-              <span>0</span>
-              <span>50+</span>
-            </div>
-          </div>
+        {/* Fuel Type */}
+        <div className="space-y-2">
+          <Label htmlFor="fuelType">Fuel Type</Label>
+          <Select value={filters.fuelType} onValueChange={(value) => handleFilterChange("fuelType", value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Any fuel type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Any fuel type</SelectItem>
+              <SelectItem value="gasoline">Gasoline</SelectItem>
+              <SelectItem value="hybrid">Hybrid</SelectItem>
+              <SelectItem value="electric">Electric</SelectItem>
+              <SelectItem value="diesel">Diesel</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* Horsepower Range */}
-        <div className="md:col-span-2">
-          <label className="text-sm font-medium mb-1.5 block">Horsepower</label>
-          <div className="px-2">
-            <Slider defaultValue={[0, 500]} min={0} max={500} step={10} />
-            <div className="flex justify-between mt-1 text-xs text-muted-foreground">
-              <span>0</span>
-              <span>500+</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="md:col-span-4 flex justify-end gap-2 mt-2">
-          <Button variant="outline" size="sm">
-            Reset
-          </Button>
-          <Button size="sm">Apply Filters</Button>
-        </div>
-      </div>
-    </div>
+        {/* Reset Button */}
+        <Button variant="outline" onClick={resetFilters} className="w-full">
+          Reset Filters
+        </Button>
+      </CardContent>
+    </Card>
   )
 }

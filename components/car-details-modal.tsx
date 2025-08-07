@@ -1,11 +1,11 @@
 "use client"
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Heart, BarChart2, Phone } from "lucide-react"
-import Image from "next/image"
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Heart, Share2, Phone, Mail } from 'lucide-react'
+import Image from "next/image"
 
 interface CarDetailsModalProps {
   car: {
@@ -13,8 +13,8 @@ interface CarDetailsModalProps {
     model: string
     year: number
     price: string
-    image?: string
-    features?: string[]
+    image: string
+    features: string[]
     mpg?: string
     horsepower?: number
     exteriorColor?: string
@@ -28,119 +28,123 @@ interface CarDetailsModalProps {
 }
 
 export function CarDetailsModal({ car, isOpen, onClose }: CarDetailsModalProps) {
-  // Default values for missing properties
-  const carDetails = {
-    exteriorColor: car.exteriorColor || "Cosmic Silver",
-    interiorColor: car.interiorColor || "Black Leather",
-    engine: car.engine || (car.horsepower ? `${car.horsepower} HP Engine` : "2.5L 4-Cylinder"),
-    driveTrain: car.driveTrain || "All-Wheel Drive",
-    description:
-      car.description ||
-      `The ${car.year} ${car.make} ${car.model} combines style, performance, and reliability in one impressive package. With its sleek design and advanced features, this vehicle offers an exceptional driving experience for both daily commutes and weekend adventures.`,
-    features: car.features || [
-      "Bluetooth Connectivity",
-      "Backup Camera",
-      "Lane Departure Warning",
-      "Adaptive Cruise Control",
-      "Heated Seats",
-      "Sunroof",
-      "Navigation System",
-      "Premium Audio",
-    ],
-  }
-
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader className="flex flex-row items-center justify-between">
-          <div>
-            <DialogTitle className="text-2xl">
-              {car.year} {car.make} {car.model}
-            </DialogTitle>
-            <DialogDescription className="text-lg font-medium">{car.price}</DialogDescription>
-          </div>
-          {/* Removed the duplicate close button */}
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">
+            {car.year} {car.make} {car.model}
+          </DialogTitle>
+          <DialogDescription className="text-xl font-semibold text-primary">
+            {car.price}
+          </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-          {/* Car Image */}
-          <div className="relative h-64 w-full rounded-lg overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Image */}
+          <div className="relative h-64 md:h-80 rounded-lg overflow-hidden">
             <Image
-              src={car.image || `/placeholder.svg?height=300&width=500`}
+              src={car.image || `/placeholder.svg?height=320&width=480`}
               alt={`${car.year} ${car.make} ${car.model}`}
               fill
               className="object-cover"
             />
           </div>
 
-          {/* Car Specifications */}
+          {/* Details */}
           <div className="space-y-4">
+            {/* Key Specs */}
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h4 className="text-sm font-medium text-muted-foreground">Exterior Color</h4>
-                <p>{carDetails.exteriorColor}</p>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-muted-foreground">Interior Color</h4>
-                <p>{carDetails.interiorColor}</p>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-muted-foreground">Engine</h4>
-                <p>{carDetails.engine}</p>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-muted-foreground">Drive Train</h4>
-                <p>{carDetails.driveTrain}</p>
-              </div>
               {car.mpg && (
                 <div>
-                  <h4 className="text-sm font-medium text-muted-foreground">Fuel Economy</h4>
-                  <p>{car.mpg}</p>
+                  <div className="text-sm text-muted-foreground">Fuel Economy</div>
+                  <div className="font-semibold">{car.mpg}</div>
                 </div>
               )}
               {car.horsepower && (
                 <div>
-                  <h4 className="text-sm font-medium text-muted-foreground">Horsepower</h4>
-                  <p>{car.horsepower} HP</p>
+                  <div className="text-sm text-muted-foreground">Horsepower</div>
+                  <div className="font-semibold">{car.horsepower} HP</div>
+                </div>
+              )}
+              {car.engine && (
+                <div>
+                  <div className="text-sm text-muted-foreground">Engine</div>
+                  <div className="font-semibold">{car.engine}</div>
+                </div>
+              )}
+              {car.driveTrain && (
+                <div>
+                  <div className="text-sm text-muted-foreground">Drivetrain</div>
+                  <div className="font-semibold">{car.driveTrain}</div>
+                </div>
+              )}
+              {car.exteriorColor && (
+                <div>
+                  <div className="text-sm text-muted-foreground">Exterior Color</div>
+                  <div className="font-semibold">{car.exteriorColor}</div>
+                </div>
+              )}
+              {car.interiorColor && (
+                <div>
+                  <div className="text-sm text-muted-foreground">Interior Color</div>
+                  <div className="font-semibold">{car.interiorColor}</div>
                 </div>
               )}
             </div>
 
+            {/* Features */}
+            <div>
+              <div className="text-sm text-muted-foreground mb-2">Features</div>
+              <div className="flex flex-wrap gap-2">
+                {car.features.map((feature, index) => (
+                  <Badge key={index} variant="secondary">
+                    {feature}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
             {/* Action Buttons */}
-            <div className="flex flex-wrap gap-2 mt-4">
-              <Button variant="outline" className="flex-1">
-                <Phone className="mr-2 h-4 w-4" />
-                Dealer Info
+            <div className="flex gap-2">
+              <Button className="flex-1">
+                <Phone className="h-4 w-4 mr-2" />
+                Call Dealer
               </Button>
-              <Button variant="outline" className="flex-1">
-                <Heart className="mr-2 h-4 w-4" />
-                Add to Wishlist
+              <Button variant="outline">
+                <Heart className="h-4 w-4" />
               </Button>
-              <Button variant="outline" className="flex-1">
-                <BarChart2 className="mr-2 h-4 w-4" />
-                Compare
+              <Button variant="outline">
+                <Share2 className="h-4 w-4" />
               </Button>
             </div>
           </div>
         </div>
 
-        <Separator className="my-4" />
-
         {/* Description */}
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Description</h3>
-          <p className="text-muted-foreground">{carDetails.description}</p>
-        </div>
+        {car.description && (
+          <>
+            <Separator />
+            <div>
+              <h3 className="font-semibold mb-2">Description</h3>
+              <p className="text-muted-foreground">{car.description}</p>
+            </div>
+          </>
+        )}
 
-        {/* Features */}
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold mb-2">Features</h3>
-          <div className="flex flex-wrap gap-2">
-            {carDetails.features.map((feature, index) => (
-              <Badge key={index} variant="secondary">
-                {feature}
-              </Badge>
-            ))}
+        {/* Contact Information */}
+        <Separator />
+        <div className="bg-muted/50 p-4 rounded-lg">
+          <h3 className="font-semibold mb-2">Contact Dealer</h3>
+          <div className="flex items-center gap-4">
+            <Button>
+              <Phone className="h-4 w-4 mr-2" />
+              (555) 123-4567
+            </Button>
+            <Button variant="outline">
+              <Mail className="h-4 w-4 mr-2" />
+              Email Dealer
+            </Button>
           </div>
         </div>
       </DialogContent>
