@@ -307,7 +307,7 @@ export default function ComparisonPage() {
       }
     }
     
-    const bestCarValue = getValue(spec === 'price' ? validCars.find(c => c.index === bestIndex)?.car.price : validCars.find(c => c.index === bestIndex)?.car.specs[spec as keyof typeof car.specs])
+    const bestCarValue = getValue(spec === 'price' ? validCars.find(c => c.index === bestIndex)?.car.price : validCars.find(c => c.index === bestIndex)?.car.specs[spec as keyof typeof c.car.specs])
     const isTie = validCars.some(c => c.index !== bestIndex && getValue(spec === 'price' ? c.car.price : c.car.specs[spec as keyof typeof c.car.specs]) === bestCarValue)
 
     return isTie ? null : bestIndex
@@ -323,13 +323,13 @@ export default function ComparisonPage() {
             <label className="block text-sm font-medium mb-2">Select Car {index + 1}</label>
             <Select
               value={carId?.toString() || ""}
-              onValueChange={(value) => handleCarSelection(index, value ? Number(value) : null)}
+              onValueChange={(value) => handleCarSelection(index, value === 'none' ? null : Number(value))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Choose a car" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">None</SelectItem>
+                <SelectItem value="none">None</SelectItem>
                 {carDatabase.map((car) => (
                   <SelectItem key={car.id} value={car.id.toString()} disabled={selectedCarIds.includes(car.id) && carId !== car.id}>
                     {car.year} {car.make} {car.model}
