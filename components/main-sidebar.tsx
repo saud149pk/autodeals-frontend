@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, Car, Heart, BarChart3, Settings, User } from 'lucide-react'
+import { Home, Car, Heart, BarChart3, Settings, User, MessageSquarePlus } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -36,11 +36,13 @@ const menuItems = [
     url: "/comparison",
     icon: BarChart3,
   },
-  {
-    title: "Statistics",
-    url: "/statistics",
-    icon: BarChart3,
-  },
+]
+
+const sampleChats = [
+  { id: "1", title: "Family SUV recommendations" },
+  { id: "2", title: "Best fuel-efficient sedans" },
+  { id: "3", title: "Comparing electric vehicles" },
+  { id: "4", title: "Sports cars under $50k" },
 ]
 
 export function MainSidebar() {
@@ -49,6 +51,16 @@ export function MainSidebar() {
       <SidebarHeader>
         <div className="px-4 py-2">
           <h2 className="text-lg font-semibold">Car Finder</h2>
+        </div>
+        <div className="px-2">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <MessageSquarePlus className="h-4 w-4" />
+                <span>New Chat</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -62,6 +74,22 @@ export function MainSidebar() {
                     <Link href={item.url}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Recent Chats</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {sampleChats.map((chat) => (
+                <SidebarMenuItem key={chat.id}>
+                  <SidebarMenuButton asChild variant="ghost">
+                    <Link href={`/#${chat.id}`}>
+                      <span className="truncate">{chat.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
