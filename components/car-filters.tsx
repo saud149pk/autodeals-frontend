@@ -28,7 +28,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
   })
 
   const handleFilterChange = (key: string, value: any) => {
-    const newFilters = { ...filters, [key]: value }
+    const newFilters = { ...filters, [key]: value === 'all' ? '' : value };
     setFilters(newFilters)
     onFilterChange?.(newFilters)
   }
@@ -70,7 +70,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
               <SelectValue placeholder="Any make" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any make</SelectItem>
+              <SelectItem value="all">Any make</SelectItem>
               <SelectItem value="toyota">Toyota</SelectItem>
               <SelectItem value="honda">Honda</SelectItem>
               <SelectItem value="ford">Ford</SelectItem>
@@ -164,7 +164,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
               <SelectValue placeholder="Any type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any type</SelectItem>
+              <SelectItem value="all">Any type</SelectItem>
               <SelectItem value="sedan">Sedan</SelectItem>
               <SelectItem value="suv">SUV</SelectItem>
               <SelectItem value="truck">Truck</SelectItem>
@@ -184,7 +184,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
               <SelectValue placeholder="Any transmission" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any transmission</SelectItem>
+              <SelectItem value="all">Any transmission</SelectItem>
               <SelectItem value="automatic">Automatic</SelectItem>
               <SelectItem value="manual">Manual</SelectItem>
               <SelectItem value="cvt">CVT</SelectItem>
@@ -200,7 +200,7 @@ export function CarFilters({ onFilterChange }: CarFiltersProps) {
               <SelectValue placeholder="Any fuel type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any fuel type</SelectItem>
+              <SelectItem value="all">Any fuel type</SelectItem>
               <SelectItem value="gasoline">Gasoline</SelectItem>
               <SelectItem value="hybrid">Hybrid</SelectItem>
               <SelectItem value="electric">Electric</SelectItem>
