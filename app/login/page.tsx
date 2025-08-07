@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Car } from "lucide-react"
+import { Car } from 'lucide-react'
 import Link from "next/link"
 
 export default function LoginPage() {
@@ -94,6 +94,10 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <Input id="signup-email" type="email" placeholder="name@example.com" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signup-phone">Phone Number</Label>
+                  <Input id="signup-phone" type="tel" placeholder="(123) 456-7890" required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">Password</Label>
