@@ -140,6 +140,12 @@ export default function HomePage() {
         car.make.toLowerCase().includes(filters.make.toLowerCase())
       )
     }
+    
+    if (filters.model) {
+      filtered = filtered.filter(car => 
+        car.model.toLowerCase().includes(filters.model.toLowerCase())
+      )
+    }
 
     if (filters.minPrice || filters.maxPrice) {
       filtered = filtered.filter(car => {
@@ -149,15 +155,25 @@ export default function HomePage() {
         return price >= min && price <= max
       })
     }
+    
+    if (filters.bodyType) {
+      // Assuming mockCars have a 'type' property
+      filtered = filtered.filter(car => {
+        const carData = car as any;
+        return carData.type?.toLowerCase() === filters.bodyType.toLowerCase()
+      })
+    }
 
     setFilteredCars(filtered)
   }
 
   return (
     <div className="container mx-auto py-6 px-4">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Chat Section */}
-        <div className="lg:col-span-2">
+      {/* Filters and Chat Section */}
+      <div>
+        <CarFilters onFilterChange={handleFilterChange} />
+
+        <div className="mt-6">
           <Card className="h-[600px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -213,11 +229,6 @@ export default function HomePage() {
               </form>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Filters Section */}
-        <div>
-          <CarFilters onFilterChange={handleFilterChange} />
         </div>
       </div>
 
